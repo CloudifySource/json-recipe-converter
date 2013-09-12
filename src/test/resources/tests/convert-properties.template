@@ -1,0 +1,45 @@
+{
+    "simpleApplication":{
+        "Resources":{
+	        "appHost":{
+	            "Type":"AWS::EC2::Instance",
+	            "Properties":{
+        			"ImageId":"#imageId#",
+	                "InstanceType":"m1.medium",
+	                "AvailabilityZone":"eu-west-1c",
+	                "SecurityGroups":["cloudify","default"], 
+	                "KeyName":"#keyName#",
+			        "Volumes":[{ 
+			          "VolumeId":{"Ref" : "smallVolume"},
+			          "Device":"#unknown1#"
+			          },{ 
+			          "VolumeId":{"Ref" : "smallEbs"},
+			          "Device":"#unknown2#"
+			        }],
+	                "Tags":[
+	                    {"Key":"Service","Value": "service1"}
+	                ]
+	            }
+	        },
+			"smallVolume":{
+		        "Type":"AWS::EC2::Volume",
+		        "Properties":{
+			    "Size":"1",
+		        "Tags":[
+		                {"Key":"Volume1","Value":"#val_1#"},
+		                {"Key":"#val-2#","Value":"#unknown3#"}
+		            ] 
+			    }
+			},
+		    "smallEbs":{
+		        "Type":"AWS::EC2::Volume",
+		        "Properties":{
+		            "Size":"1",
+		            "Tags":[
+		                {"Key":"Volume2","Value":"#val_1#"}
+		            ] 
+		        }
+		    }
+        }
+    }
+}
