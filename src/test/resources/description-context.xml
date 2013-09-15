@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cloud="http://schema.cloudfoundry.org/spring" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+">
+
+	<util:map id="descriptionResults">
+		<entry key="/service/applications/description">
+			<util:list>
+				<ref bean="simpleApplication" />
+				<ref bean="extendedApplication" />
+			</util:list>
+		</entry>
+		<entry key="/service/applications/simpleApplication/services/description">
+			<util:list>
+				<ref bean="simpleApplication" />
+			</util:list>
+		</entry>
+		<entry key="/service/applications/extendedApplication/services/description">
+			<util:list>
+				<ref bean="extendedApplication" />
+			</util:list>
+		</entry>
+	</util:map>
+
+	<util:map id="simpleApplication" map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="java.lang.Object">
+		<entry key="applicationName" value="simpleApplication" />
+		<entry key="authGroups" value="" />
+		<entry key="servicesDescription">
+			<util:list list-class="java.util.ArrayList">
+				<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="java.lang.Object">
+					<entry key="applicationName" value="simpleApplication" />
+					<entry key="serviceName" value="simpleService1" />
+					<entry key="instancesDescription">
+						<util:list list-class="java.util.ArrayList" />
+					</entry>
+					<entry key="instanceCount" value="0" />
+					<entry key="plannedInstances" value="1" />
+					<entry key="serviceState" value="IN_PROGRESS" />
+					<entry key="deploymentId" value="null" />
+				</util:map>
+			</util:list>
+		</entry>
+		<entry key="applicationState" value="IN_PROGRESS" />
+	</util:map>
+
+	<util:map id="extendedApplication" map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="java.lang.Object">
+		<entry key="applicationName" value="extendedApplication" />
+		<entry key="authGroups" value="" />
+		<entry key="servicesDescription">
+			<util:list list-class="java.util.ArrayList">
+				<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="java.lang.Object">
+					<entry key="applicationName" value="extendedApplication" />
+					<entry key="serviceName" value="extendedService2" />
+					<entry key="instancesDescription">
+						<util:list list-class="java.util.ArrayList">
+							<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="java.lang.Object">
+								<entry key="hostAddress" value="10.154.174.186" />
+								<entry key="hostName" value="ip-10-154-174-186" />
+								<entry key="instanceId" value="1" />
+								<entry key="instanceStatus" value="RUNNING" />
+								<entry key="instanceName" value="extendedApplication.extendedService2" />
+							</util:map>
+						</util:list>
+					</entry>
+					<entry key="instanceCount" value="1" />
+					<entry key="plannedInstances" value="1" />
+					<entry key="serviceState" value="STARTED" />
+					<entry key="deploymentId" value="null" />
+				</util:map>
+				<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="java.lang.Object">
+					<entry key="applicationName" value="extendedApplication" />
+					<entry key="serviceName" value="extendedService1" />
+					<entry key="instancesDescription">
+						<util:list list-class="java.util.ArrayList">
+							<util:map map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="java.lang.Object">
+								<entry key="hostAddress" value="10.164.17.224" />
+								<entry key="hostName" value="ip-10-164-17-224" />
+								<entry key="instanceId" value="1" />
+								<entry key="instanceStatus" value="RUNNING" />
+								<entry key="instanceName" value="extendedApplication.extendedService1" />
+							</util:map>
+						</util:list>
+					</entry>
+					<entry key="instanceCount" value="1" />
+					<entry key="plannedInstances" value="1" />
+					<entry key="serviceState" value="STARTED" />
+					<entry key="deploymentId" value="null" />
+				</util:map>
+			</util:list>
+		</entry>
+		<entry key="applicationState" value="STARTED" />
+	</util:map>
+
+</beans>

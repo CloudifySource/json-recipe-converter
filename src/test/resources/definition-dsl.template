@@ -1,0 +1,107 @@
+{
+    "sampleApplication":{
+        "Resources":{
+	        "appHost":{
+	            "Type":"AWS::EC2::Instance",
+	            "Properties":{
+	                "ImageId":"ami-fc7a6e88",
+	                "InstanceType":"m1.medium",
+	                "AvailabilityZone":"eu-west-1c",
+	                "SecurityGroups":["cloudify","default"], 
+	                "KeyName":"cloudify",
+	                "Volumes":[{ 
+	                    "VolumeId":{"Ref" : "smallVolume"},
+	                    "Device":"/dev/sdk"
+	                }],
+	                "Tags":[
+	                    {"Key":"Instance","Value": "someInstanceTag"}
+	                ], 
+	                "UserData": { "Fn::Join" : [" >> /home/ubuntu/output.txt\n", [
+	                    "export NIC_ADDR=`hostname`",
+	                    "export JAVA_HOME=/home/ubuntu/java",
+	                    "export LOOKUPLOCATORS=$LUS_IP_ADDRESS",
+	                    "export WORKING_HOME_DIRECTORY=/home/ubuntu",
+	                    "echo installing jdk",
+	                    "wget -q -O $WORKING_HOME_DIRECTORY/java.bin http://repository.cloudifysource.org/com/oracle/java/1.6.0_32/jdk-6u32-linux-x64.bin",
+	                    "chmod +x $WORKING_HOME_DIRECTORY/java.bin",
+	                    "echo -e \"\n\" > $WORKING_HOME_DIRECTORY/input.txt",
+	                    "rm -rf $WORKING_HOME_DIRECTORY/java",
+     	                "mkdir $WORKING_HOME_DIRECTORY/java",
+     	                "cd $WORKING_HOME_DIRECTORY/java",
+	                    "$WORKING_HOME_DIRECTORY/java.bin < $WORKING_HOME_DIRECTORY/input.txt > /dev/null",
+	                    "mv $WORKING_HOME_DIRECTORY/java/*/* $WORKING_HOME_DIRECTORY/java",
+	                    "export JAVA_HOME=$WORKING_HOME_DIRECTORY/java",
+     	                "echo apt-get unzip",
+     	                "sudo apt-get update",
+     	                "sudo apt-get install unzip",
+     	                "echo installing gigaspaces",
+     	                "wget -q -O $WORKING_HOME_DIRECTORY/gigaspaces.zip https://s3-eu-west-1.amazonaws.com/gigaspaces-repository-eu/org/cloudifysource/2.6.1-SNAPSHOT/gigaspaces-cloudify-2.6.1-ga-b5199-71.zip",
+     	                "unzip $WORKING_HOME_DIRECTORY/gigaspaces.zip -d $WORKING_HOME_DIRECTORY",
+     	                "mv $WORKING_HOME_DIRECTORY/gigaspaces-cloudify-2.6.1-ga $WORKING_HOME_DIRECTORY/gigaspaces",
+     	                "chmod -R 777 $WORKING_HOME_DIRECTORY/java",
+     	                "chmod -R 777 $WORKING_HOME_DIRECTORY/gigaspaces",
+     	                "nohup $WORKING_HOME_DIRECTORY/gigaspaces/bin/cloudify.sh start-agent -timeout 30 --verbose"
+	                ]]}
+	            }
+	        },
+	  	    "smallVolume":{
+		        "Type":"AWS::EC2::Volume",
+		        "Properties":{
+		            "Size":"1",
+		            "AvailabilityZone":"eu-west-1c",
+	                "Tags":[
+	                    {"Key":"Volume1","Value":"someVolumeTag1"},
+	                    {"Key":"Volume2","Value":"someVolumeTag2"}
+	                ] 
+		        }
+		    }
+        },
+        "Layers":{
+            "someService":{
+                "numInstance":1,
+                "DependsOn":["apacheLB", "mySQL"],
+                "Instances":{"Ref":"appHost"},
+                "Template":{
+	                "Type":"AWS::EC2::Volume",
+	                "Properties":{
+    	                "Size":"1",
+	                    "AvailabilityZone":"eu-west-1c",
+                        "Tags":[
+                            {"Key":"Volume1","Value":"someVolumeTag1"},
+                            {"Key":"Volume2","Value":"someVolumeTag2"}
+                        ]
+	                }
+			    },
+                "lifecycle": {
+                    "preServiceStart":"",
+                    "init":"",
+                    "preInstall":"",
+                    "install":"HANDLE_BY_PUPPET",
+                    "postInstall":"",
+                    "preStart":"",
+                    "start":"",
+                    "startDetection":"",
+                    "locator":"",
+                    "postStart":"TO_IMPLEMENT will point to external scripts (groovy, bash, bat)",
+                    "preStop":"TO_IMPLEMENT will point to external scripts",
+                    "stop":"TO_IMPLEMENT will point to external scripts",
+                    "postStop":"",
+                    "shutdown":"",
+                    "preServiceStop":""
+                },
+                "properties" :[
+                    {"Key":"KEY","Value":"VALUE"},
+                    {"Key":"KEY","Value":"VALUE"}
+                ],           
+                "monitoring":{
+                    "start": "refered_to_external_groovy_file",
+                    "performance": "refered_to_external_groovy_file"
+                },
+                "customCommands":{
+                    "command_name" : "mapped_to_external_groovy_file"
+                },
+                "scaling": "refered_to_external_groovy_file"
+            }
+        }
+    }
+}
