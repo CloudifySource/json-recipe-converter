@@ -17,6 +17,8 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 /**
  * Represents a script node.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 @JsonDeserialize(using = ScriptDeserializer.class)
 public interface ScriptType {

@@ -19,6 +19,8 @@ import org.codehaus.jackson.annotate.JsonAnySetter;
 /**
  * Bean which represents the Ref's node.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class Ref {
 

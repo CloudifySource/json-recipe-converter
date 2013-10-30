@@ -15,6 +15,8 @@ package org.cloudifysource.cloudformation.converter.api;
 /**
  * Exception to be thrown when the JSON template cannot be parsed.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class TemplateParserException extends Exception {
 

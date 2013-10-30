@@ -17,6 +17,8 @@ import java.util.List;
 /**
  * The bean for DescribeStack reponse.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class DescribeStackResponse {
 	private List<Object> applications;

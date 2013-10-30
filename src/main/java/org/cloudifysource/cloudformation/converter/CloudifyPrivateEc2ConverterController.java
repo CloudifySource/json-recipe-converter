@@ -49,6 +49,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * REST Controller.
  * 
  * @author victor keophila
+ * @since 2.7.0
  * 
  */
 @Controller
@@ -94,7 +95,7 @@ public class CloudifyPrivateEc2ConverterController {
 	 * @param url
 	 *            The URL of the Cloudify REST gateway.
 	 * @param version
-	 *            Cloudify Version (i.e: 2.6.1)
+	 *            Cloudify Version (i.e: 2.6.1, 2.7.0-Cloudify-ga)
 	 * @return An Okay status
 	 * @throws MalformedURLException
 	 *             If the given url is incorrect.

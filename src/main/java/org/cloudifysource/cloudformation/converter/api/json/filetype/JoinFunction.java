@@ -24,6 +24,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * 
  * @author victor
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class JoinFunction implements ScriptType {
 

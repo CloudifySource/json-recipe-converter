@@ -23,6 +23,8 @@ import org.codehaus.jackson.annotate.JsonAnySetter;
 /**
  * Bean which represents StackLayers's node.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class StackLayers {
 

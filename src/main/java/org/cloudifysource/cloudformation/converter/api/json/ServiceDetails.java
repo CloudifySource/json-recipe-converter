@@ -27,6 +27,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 /**
  * Bean which represents ServiceDetails's node.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class ServiceDetails {
 

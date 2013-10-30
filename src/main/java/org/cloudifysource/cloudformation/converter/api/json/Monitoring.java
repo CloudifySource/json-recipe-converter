@@ -20,6 +20,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 /**
  * Bean which represents the Monitoring's node.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class Monitoring {
 
