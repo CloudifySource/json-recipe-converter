@@ -26,6 +26,7 @@ import org.cloudifysource.restclient.exceptions.RestClientException;
  * API contract.
  * 
  * @author victor
+ * @since 2.7.0
  * 
  */
 public interface ConverterAPI {

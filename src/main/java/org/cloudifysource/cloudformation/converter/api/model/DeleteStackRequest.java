@@ -17,6 +17,8 @@ import javax.validation.constraints.NotNull;
 /**
  * The bean for DeleteStack request.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class DeleteStackRequest {
 

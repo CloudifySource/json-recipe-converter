@@ -15,6 +15,8 @@ package org.cloudifysource.cloudformation.converter.api.model;
 /**
  * The DescribeStack request.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class DescribeStackRequest {
 	private String stackName;

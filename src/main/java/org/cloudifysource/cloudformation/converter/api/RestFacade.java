@@ -15,6 +15,7 @@ package org.cloudifysource.cloudformation.converter.api;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
@@ -27,135 +28,140 @@ import org.cloudifysource.restclient.RestClient;
 import org.cloudifysource.restclient.RestException;
 import org.cloudifysource.restclient.exceptions.RestClientException;
 
+import com.j_spaces.kernel.CloudifyVersion;
+
 /**
  * Class which communicates with Cloudify REST Gateway.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class RestFacade {
-    private final Logger logger = Logger.getLogger(RestFacade.class.getName());
+	private final Logger logger = Logger.getLogger(RestFacade.class.getName());
 
-    private static final String SERVICE_CONTROLLER_URL = "/service/";
+	private static final String SERVICE_CONTROLLER_URL = "/service/";
 
-    private RestClient newRestClient;
-    private GSRestClient client;
+	private RestClient newRestClient;
+	private GSRestClient client;
 
-    /**
-     * Connect the Cloudify REST Gateway.
-     * 
-     * @param user
-     *            The user if security is enabled.
-     * @param password
-     *            The password if security is enabled.
-     * @param urlString
-     *            The url to Cloudify REST Gateway.
-     * @param gsVersion
-     *            Cloudify version.
-     * @throws RestException
-     *             If a REST error occurs
-     * @throws RestClientException
-     *             If a REST error occurs
-     * @throws MalformedURLException
-     *             If the url is malformed.
-     */
-    public void connect(final String user, final String password, final String urlString, final String gsVersion)
-            throws RestException, RestClientException,
-            MalformedURLException {
-        if (urlString == null) {
-            throw new IllegalStateException("Cannot conncet to a cloudify manager (url=null).");
-        }
-        final URL url = new URL(urlString.startsWith("http") ? urlString : "http://" + urlString);
+	/**
+	 * Connect the Cloudify REST Gateway.
+	 * 
+	 * @param user
+	 *            The user if security is enabled.
+	 * @param password
+	 *            The password if security is enabled.
+	 * @param urlString
+	 *            The url to Cloudify REST Gateway.
+	 * @param gsVersion
+	 *            Cloudify version.
+	 * @throws RestException
+	 *             If a REST error occurs
+	 * @throws RestClientException
+	 *             If a REST error occurs
+	 * @throws MalformedURLException
+	 *             If the url is malformed.
+	 */
+	public void connect(final String user, final String password, final String urlString, final String gsVersion)
+			throws RestException, RestClientException,
+			MalformedURLException {
+		if (urlString == null) {
+			throw new IllegalStateException("Cannot conncet to a cloudify manager (url=null).");
+		}
+		final URL url = new URL(urlString.startsWith("http") ? urlString : "http://" + urlString);
+		final StringTokenizer tokenizer = new StringTokenizer(gsVersion == null ? "" : gsVersion, "-");
+		final CloudifyVersion cloudifyVersion = new CloudifyVersion();
+		final String version = tokenizer.hasMoreElements() ? tokenizer.nextToken() : cloudifyVersion.getVersion();
+		final String edition = tokenizer.hasMoreElements() ? tokenizer.nextToken() : cloudifyVersion.getEdition();
+		final String milestone = tokenizer.hasMoreElements() ? tokenizer.nextToken() : cloudifyVersion.getMilestone();
+		final String versionNumber = version + "-" + edition + "-" + milestone;
+		logger.fine(String.format("Connected to REST using url=%s, user=%s, version=%s", urlString, user, version));
+		this.client = new GSRestClient(user, password, url, versionNumber);
+		this.newRestClient = new RestClient(url, user, password, version);
+		client.get(SERVICE_CONTROLLER_URL + "testrest");
+		if (StringUtils.isNotEmpty(user) || StringUtils.isNotEmpty(password)) {
+			this.reconnect(user, password);
+		}
+	}
 
-        final String version = StringUtils.isBlank(gsVersion)
-                ? "2.6.1" : gsVersion; // PlatformVersion.getVersionNumber();
-        final String versionNumber = version + "-Cloudify-ga"; // PlatformVersion.getVersion();
-        logger.fine(String.format("Connected to REST using url=%s, user=%s, version=%s", urlString, user, version));
-        this.client = new GSRestClient(user, password, url, versionNumber);
-        this.newRestClient = new RestClient(url, user, password, version);
-        client.get(SERVICE_CONTROLLER_URL + "testrest");
-        if (StringUtils.isNotEmpty(user) || StringUtils.isNotEmpty(password)) {
-            this.reconnect(user, password);
-        }
+	private void reconnect(final String username, final String password) throws RestException {
+		try {
+			client.setCredentials(username, password);
+			newRestClient.setCredentials(username, password);
+			// test connection
+			client.get(SERVICE_CONTROLLER_URL + "testlogin");
+			newRestClient.connect();
+		} catch (final Exception e) {
+			throw new RestException(e);
+		}
+	}
 
-    }
+	/**
+	 * uploads a file to repository using the pre-configured client.
+	 * 
+	 * @param client
+	 *            .
+	 * @param file
+	 *            .
+	 * @param displayer
+	 *            .
+	 * @return the returned upload key
+	 * @throws RestClientException .
+	 * @throws CLIException .
+	 */
+	String uploadToRepo(final File file) throws RestClientException, ConverterException {
+		if (file != null) {
+			if (!file.isFile()) {
+				throw new ConverterException(file.getAbsolutePath() + " is not a file or is missing");
+			}
+			return newRestClient.upload(null, file).getUploadKey();
+		}
+		return null;
+	}
 
-    private void reconnect(final String username, final String password) throws RestException {
-        try {
-            client.setCredentials(username, password);
-            newRestClient.setCredentials(username, password);
-            // test connection
-            client.get(SERVICE_CONTROLLER_URL + "testlogin");
-            newRestClient.connect();
-        } catch (final Exception e) {
-            throw new RestException(e);
-        }
-    }
+	/**
+	 * Calls installApplication.
+	 * 
+	 * @param stackName
+	 *            The applicationName.
+	 * @param installRequest
+	 *            The installRequest.
+	 * @return Cloudify InstallApplicationResponse.
+	 * @throws RestClientException
+	 *             If an error occurs.
+	 */
+	public InstallApplicationResponse installApplication(final String stackName,
+			final InstallApplicationRequest installRequest) throws RestClientException {
+		return newRestClient.installApplication(stackName, installRequest);
 
-    /**
-     * uploads a file to repository using the pre-configured client.
-     * 
-     * @param client
-     *            .
-     * @param file
-     *            .
-     * @param displayer
-     *            .
-     * @return the returned upload key
-     * @throws RestClientException .
-     * @throws CLIException .
-     */
-    String uploadToRepo(final File file) throws RestClientException, ConverterException {
-        if (file != null) {
-            if (!file.isFile()) {
-                throw new ConverterException(file.getAbsolutePath() + " is not a file or is missing");
-            }
-            return newRestClient.upload(null, file).getUploadKey();
-        }
-        return null;
-    }
+	}
 
-    /**
-     * Calls installApplication.
-     * 
-     * @param stackName
-     *            The applicationName.
-     * @param installRequest
-     *            The installRequest.
-     * @return Cloudify InstallApplicationResponse.
-     * @throws RestClientException
-     *             If an error occurs.
-     */
-    public InstallApplicationResponse installApplication(final String stackName,
-            final InstallApplicationRequest installRequest) throws RestClientException {
-        return newRestClient.installApplication(stackName, installRequest);
+	/**
+	 * Calls uninstallApplication.
+	 * 
+	 * @param applicationName
+	 *            The application name to uninstall.
+	 * @param timeOutInMinutes
+	 *            The timeout in minutes.
+	 * @return The Cloudify UninstallApplicationResponse.
+	 * @throws RestClientException
+	 *             If an error occurs.
+	 */
+	public UninstallApplicationResponse uninstallApplication(final String applicationName, final int timeOutInMinutes)
+			throws RestClientException {
+		return newRestClient.uninstallApplication(applicationName, timeOutInMinutes);
+	}
 
-    }
-
-    /**
-     * Calls uninstallApplication.
-     * 
-     * @param applicationName
-     *            The application name to uninstall.
-     * @param timeOutInMinutes
-     *            The timeout in minutes.
-     * @return The Cloudify UninstallApplicationResponse.
-     * @throws RestClientException
-     *             If an error occurs.
-     */
-    public UninstallApplicationResponse uninstallApplication(final String applicationName, final int timeOutInMinutes)
-            throws RestClientException {
-        return newRestClient.uninstallApplication(applicationName, timeOutInMinutes);
-    }
-
-    /**
-     * Calls Cloudify REST Gateway using relativeUrl.
-     * 
-     * @param relativeUrl
-     *            A REST request.
-     * @return The REST response.
-     * @throws ErrorStatusException
-     *             If an error occurs.
-     */
-    public Object get(final String relativeUrl) throws ErrorStatusException {
-        return client.get(relativeUrl);
-    }
+	/**
+	 * Calls Cloudify REST Gateway using relativeUrl.
+	 * 
+	 * @param relativeUrl
+	 *            A REST request.
+	 * @return The REST response.
+	 * @throws ErrorStatusException
+	 *             If an error occurs.
+	 */
+	public Object get(final String relativeUrl) throws ErrorStatusException {
+		return client.get(relativeUrl);
+	}
 }

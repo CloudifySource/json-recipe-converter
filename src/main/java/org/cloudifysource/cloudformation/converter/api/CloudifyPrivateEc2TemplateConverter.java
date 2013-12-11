@@ -39,6 +39,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  * This class convert JSON template into Cloudify groovy templates (cloud and recipes files).
  * 
  * @author victor
+ * @since 2.7.0
  * 
  */
 public class CloudifyPrivateEc2TemplateConverter {

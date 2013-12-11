@@ -19,6 +19,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 /**
  * Bean which represents StackApplication's node.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class StackApplication {
 

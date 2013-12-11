@@ -26,7 +26,7 @@ import org.cloudifysource.cloudformation.converter.api.model.CreateStackResponse
 import org.cloudifysource.cloudformation.converter.api.model.DeleteStackRequest;
 import org.cloudifysource.cloudformation.converter.api.model.DescribeStackRequest;
 import org.cloudifysource.cloudformation.converter.api.model.DescribeStackResponse;
-import org.cloudifysource.dsl.Application;
+import org.cloudifysource.domain.Application;
 import org.cloudifysource.dsl.internal.CloudifyConstants;
 import org.cloudifysource.dsl.internal.DSLException;
 import org.cloudifysource.dsl.internal.DSLReader;
@@ -44,6 +44,7 @@ import org.cloudifysource.restclient.exceptions.RestClientException;
  * API implementation. This method calls Cloudify REST API to createStack, deleteStack and describeStack.
  * 
  * @author victor
+ * @since 2.7.0
  * 
  */
 public class CloudifyPrivateEc2Converter implements ConverterAPI {

@@ -15,6 +15,8 @@ package org.cloudifysource.cloudformation.converter.api;
 /**
  * Exception to be thrown when Cloudify templates could not be generate.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class ConverterException extends Exception {
 

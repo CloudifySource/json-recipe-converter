@@ -18,6 +18,8 @@ import java.io.IOException;
 /**
  * Abstract class for Cloudify template generation.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public abstract class GroovyTemplateGenerator {
 

@@ -19,6 +19,8 @@ import org.codehaus.jackson.annotate.JsonAnySetter;
 /**
  * The root node of the template.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class JsonTemplate {
 

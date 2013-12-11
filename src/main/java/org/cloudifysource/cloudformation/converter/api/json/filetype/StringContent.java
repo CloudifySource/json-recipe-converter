@@ -19,6 +19,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Represents a node which contains the content of a script.
  * 
  * @author victor
+ * @since 2.7.0
  * 
  */
 public class StringContent implements ScriptType {

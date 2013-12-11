@@ -15,6 +15,8 @@ package org.cloudifysource.cloudformation.converter.api.model;
 /**
  * The bean for CreateStack response.
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class CreateStackResponse {
 

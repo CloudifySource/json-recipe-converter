@@ -5,7 +5,7 @@ JSON recipe converter has to be used with privateEc2 driver.
 The converter is a REST API that parse and deploy recipes from CloudFormation like JSON template.
 
 ## Requirements ##
-* Cloudify 2.6.1 with a bootstrapped manager with privateEc2 driver.
+* Cloudify 2.7.0 with a bootstrapped manager with privateEc2 driver.
 * Apache Tomcat 7.x.
 	* set CATALINA_HOME in the variable environment.
 * Maven 3.x

@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
  * Thrown when a validation fails.
  * 
  * @author victor
+ * @since 2.7.0
  * 
  */
 public class PrivateEc2RestValidationException extends Exception {

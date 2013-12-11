@@ -36,6 +36,8 @@ import org.codehaus.jackson.map.JsonDeserializer;
  * 
  * @author victor
  * 
+ * @author victor
+ * @since 2.7.0
  */
 public class ScriptDeserializer extends JsonDeserializer<ScriptType> {
 

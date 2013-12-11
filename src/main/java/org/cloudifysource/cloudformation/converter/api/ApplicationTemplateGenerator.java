@@ -24,6 +24,7 @@ import org.cloudifysource.cloudformation.converter.api.json.ServiceDetails;
  * Generates Cloudify application template from the DSL.
  * 
  * @author victor
+ * @since 2.7.0
  * 
  */
 public class ApplicationTemplateGenerator extends GroovyTemplateGenerator {

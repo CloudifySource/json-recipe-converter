@@ -12,9 +12,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<compiler.source-version>1.6</compiler.source-version>
 		<complier.target-version>1.6</complier.target-version>
-		<cloudifyVersion>2.6.1-SNAPSHOT</cloudifyVersion>
-		<openspacesVersion>9.6.1-SNAPSHOT</openspacesVersion>
-		<org.springframework-version>3.1.3.RELEASE</org.springframework-version>
+		<cloudifyVersion>2.7.0-SNAPSHOT</cloudifyVersion>
+		<openspacesVersion>9.7.0-SNAPSHOT</openspacesVersion>
+		<org.springframework-version>3.2.4.RELEASE</org.springframework-version>
 		<junitVersion>4.8.2</junitVersion>
 		<org.slf4j-version>1.6.1</org.slf4j-version>
 	</properties>
@@ -92,24 +92,32 @@
 			<groupId>org.cloudifysource</groupId>
 			<artifactId>dsl</artifactId>
 			<version>${cloudifyVersion}</version>
-			<!-- <scope>provided</scope> -->
+		</dependency>
+		<dependency>
+			<groupId>org.cloudifysource</groupId>
+			<artifactId>version</artifactId>
+			<version>${cloudifyVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.cloudifysource</groupId>
+			<artifactId>domain</artifactId>
+			<version>${cloudifyVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.cloudifysource</groupId>
 			<artifactId>rest-client</artifactId>
 			<version>${cloudifyVersion}</version>
-			<!-- <scope>provided</scope> -->
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.gigaspaces</groupId>
 			<artifactId>gs-runtime</artifactId>
 			<version>${openspacesVersion}</version>
-			<scope>provided</scope>
-		</dependency> -->
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.gigaspaces</groupId>
 			<artifactId>gs-openspaces</artifactId>
-			<version>9.6.0-SNAPSHOT</version>
+			<version>${openspacesVersion}</version>
 			<scope>runtime</scope>
 		</dependency>
 		
@@ -130,7 +138,6 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
-			<!-- <scope>provided</scope> -->
 		</dependency>
 
 		<!-- TESTING -->
